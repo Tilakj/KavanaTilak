@@ -1,16 +1,10 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
-import { Sparkles, Calendar } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Calendar } from "lucide-react";
 import { weddingConfig } from "@/utils/weddingConfig";
 
 export default function ScratchCardReveal() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isScratchedOff, setIsScratchedOff] = useState(false);
-  const isDrawingRef = useRef(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   // Calculate live countdown timer
@@ -39,196 +33,16 @@ export default function ScratchCardReveal() {
     return () => clearInterval(interval);
   }, []);
 
-  // Setup HTML5 canvas scratch layer and handle raw non-passive touch listeners
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || isScratchedOff) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Set canvas dimensions based on container parent
-    const resizeCanvas = () => {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (rect) {
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        
-        // Redraw gold foil coating on resize
-        drawGoldFoil(ctx, canvas.width, canvas.height);
-      }
-    };
-
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    // Event handlers for scratching
-    const getEventPos = (e: Event, el: HTMLCanvasElement) => {
-      const rect = el.getBoundingClientRect();
-      if (e.type.startsWith("touch")) {
-        const touchEvent = e as TouchEvent;
-        if (touchEvent.touches.length === 0) return { x: 0, y: 0 };
-        return {
-          x: touchEvent.touches[0].clientX - rect.left,
-          y: touchEvent.touches[0].clientY - rect.top,
-        };
-      } else {
-        const mouseEvent = e as MouseEvent;
-        return {
-          x: mouseEvent.clientX - rect.left,
-          y: mouseEvent.clientY - rect.top,
-        };
-      }
-    };
-
-    const handleScratch = (e: Event) => {
-      const pos = getEventPos(e, canvas);
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.beginPath();
-      ctx.arc(pos.x, pos.y, 28, 0, Math.PI * 2); // 28px brush diameter
-      ctx.fill();
-    };
-
-    const startHandler = (e: Event) => {
-      // Prevent scrolling on mobile during scratching
-      e.preventDefault();
-      isDrawingRef.current = true;
-      handleScratch(e);
-    };
-
-    const moveHandler = (e: Event) => {
-      if (!isDrawingRef.current) return;
-      e.preventDefault();
-      handleScratch(e);
-    };
-
-    const endHandler = () => {
-      isDrawingRef.current = false;
-      checkScratchPercentage(canvas, ctx);
-    };
-
-    // Add native listeners manually to set passive: false (critical for preventDefault on mobile Safari/Chrome)
-    canvas.addEventListener("mousedown", startHandler);
-    canvas.addEventListener("mousemove", moveHandler);
-    canvas.addEventListener("mouseup", endHandler);
-    canvas.addEventListener("mouseleave", endHandler);
-
-    canvas.addEventListener("touchstart", startHandler, { passive: false });
-    canvas.addEventListener("touchmove", moveHandler, { passive: false });
-    canvas.addEventListener("touchend", endHandler);
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      
-      canvas.removeEventListener("mousedown", startHandler);
-      canvas.removeEventListener("mousemove", moveHandler);
-      canvas.removeEventListener("mouseup", endHandler);
-      canvas.removeEventListener("mouseleave", endHandler);
-
-      canvas.removeEventListener("touchstart", startHandler);
-      canvas.removeEventListener("touchmove", moveHandler);
-      canvas.removeEventListener("touchend", endHandler);
-    };
-  }, [isScratchedOff]);
-
-  // Draw golden metallic canvas surface
-  const drawGoldFoil = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
-    // Fill background gold gradient
-    const grad = ctx.createLinearGradient(0, 0, w, h);
-    grad.addColorStop(0, "#bf953f");
-    grad.addColorStop(0.25, "#fcf6ba");
-    grad.addColorStop(0.5, "#b38728");
-    grad.addColorStop(0.75, "#fbf5b7");
-    grad.addColorStop(1, "#aa771c");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, h);
-
-    // Overlay light gold dust noise texture for a premium tactile look
-    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-    for (let i = 0; i < 2000; i++) {
-      const x = Math.random() * w;
-      const y = Math.random() * h;
-      const r = Math.random() * 1.5;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Add card text decoration
-    ctx.font = "italic 20px Cormorant Garamond, Serif";
-    ctx.fillStyle = "#5c3e08";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("Scratch to Reveal the Big Day", w / 2, h / 2 - 10);
-
-    ctx.font = "bold 10px Outfit, Sans-Serif";
-    ctx.fillText("✨ DRAG OR SWIPE TO RUB ✨", w / 2, h / 2 + 18);
-  };
-
-  // Calculate remaining gold coating area
-  const checkScratchPercentage = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
-    try {
-      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const pixels = imgData.data;
-      let transparentCount = 0;
-
-      // Scan alpha channel of pixels (every 4th element)
-      for (let i = 3; i < pixels.length; i += 4) {
-        if (pixels[i] === 0) {
-          transparentCount++;
-        }
-      }
-
-      const scratchRatio = transparentCount / (pixels.length / 4);
-
-      // Trigger automatic complete reveal at 40% scratched
-      if (scratchRatio > 0.40) {
-        setIsScratchedOff(true);
-        triggerConfetti();
-      }
-    } catch (err) {
-      console.warn("Scratch percentage check failed due to cross-origin images or dimensions.", err);
-    }
-  };
-
-  // Spectacular Confetti Spray
-  const triggerConfetti = () => {
-    const duration = 2.5 * 1000;
-    const end = Date.now() + duration;
-
-    (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0, y: 0.8 },
-        colors: ["#bf953f", "#fcf6ba", "#b38728", "#aa771c"],
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1, y: 0.8 },
-        colors: ["#bf953f", "#fcf6ba", "#b38728", "#aa771c"],
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    })();
-  };
-
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 relative">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.03)_0%,rgba(0,0,0,0)_70%)] pointer-events-none" />
 
       {/* Decorative Gold Border Frame Wrapper */}
       <div 
-        ref={containerRef}
-        className="w-full max-w-xl aspect-[1.8/1] rounded-2xl relative border-2 border-[#d4af37]/30 bg-[#090f24]/90 overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
+        className="w-full max-w-xl aspect-[1.8/1] rounded-2xl relative border-2 border-[#d4af37]/30 bg-[#090f24]/90 overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center justify-center"
       >
         {/* Background Layer: The Revealed Date and Countdown */}
-        <div className="absolute inset-0 p-6 flex flex-col items-center justify-center text-center">
+        <div className="p-6 flex flex-col items-center justify-center text-center">
           <Calendar className="w-8 h-8 text-[#d4af37] mb-2 animate-bounce" />
           
           <h3 className="font-serif text-2xl md:text-3xl text-gold-300 tracking-wide font-light">
@@ -260,30 +74,7 @@ export default function ScratchCardReveal() {
             ))}
           </div>
         </div>
-
-        {/* Foreground Layer: Interactive Scratch Canvas */}
-        <AnimatePresence>
-          {!isScratchedOff && (
-            <motion.canvas
-              ref={canvasRef}
-              className="absolute inset-0 z-10 w-full h-full cursor-crosshair touch-none"
-              exit={{ opacity: 0, scale: 1.05, filter: "blur(5px)" }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            />
-          )}
-        </AnimatePresence>
       </div>
-
-      {/* Helper text shown after reveal */}
-      {isScratchedOff && (
-        <motion.p
-          className="text-xs text-gold-400 font-serif italic tracking-widest mt-4 flex items-center gap-1.5"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <Sparkles className="w-3.5 h-3.5" /> Can't wait to see you there! <Sparkles className="w-3.5 h-3.5" />
-        </motion.p>
-      )}
     </div>
   );
 }
