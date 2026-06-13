@@ -39,10 +39,10 @@ export default function ScratchCardReveal() {
     return () => clearInterval(interval);
   }, []);
 
-  // Setup HTML5 canvas scratch layer
+  // Setup HTML5 canvas scratch layer and handle raw non-passive touch listeners
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || isScratchedOff) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -61,7 +61,74 @@ export default function ScratchCardReveal() {
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
-    return () => window.removeEventListener("resize", resizeCanvas);
+
+    // Event handlers for scratching
+    const getEventPos = (e: Event, el: HTMLCanvasElement) => {
+      const rect = el.getBoundingClientRect();
+      if (e.type.startsWith("touch")) {
+        const touchEvent = e as TouchEvent;
+        if (touchEvent.touches.length === 0) return { x: 0, y: 0 };
+        return {
+          x: touchEvent.touches[0].clientX - rect.left,
+          y: touchEvent.touches[0].clientY - rect.top,
+        };
+      } else {
+        const mouseEvent = e as MouseEvent;
+        return {
+          x: mouseEvent.clientX - rect.left,
+          y: mouseEvent.clientY - rect.top,
+        };
+      }
+    };
+
+    const handleScratch = (e: Event) => {
+      const pos = getEventPos(e, canvas);
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 28, 0, Math.PI * 2); // 28px brush diameter
+      ctx.fill();
+    };
+
+    const startHandler = (e: Event) => {
+      // Prevent scrolling on mobile during scratching
+      e.preventDefault();
+      isDrawingRef.current = true;
+      handleScratch(e);
+    };
+
+    const moveHandler = (e: Event) => {
+      if (!isDrawingRef.current) return;
+      e.preventDefault();
+      handleScratch(e);
+    };
+
+    const endHandler = () => {
+      isDrawingRef.current = false;
+      checkScratchPercentage(canvas, ctx);
+    };
+
+    // Add native listeners manually to set passive: false (critical for preventDefault on mobile Safari/Chrome)
+    canvas.addEventListener("mousedown", startHandler);
+    canvas.addEventListener("mousemove", moveHandler);
+    canvas.addEventListener("mouseup", endHandler);
+    canvas.addEventListener("mouseleave", endHandler);
+
+    canvas.addEventListener("touchstart", startHandler, { passive: false });
+    canvas.addEventListener("touchmove", moveHandler, { passive: false });
+    canvas.addEventListener("touchend", endHandler);
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      
+      canvas.removeEventListener("mousedown", startHandler);
+      canvas.removeEventListener("mousemove", moveHandler);
+      canvas.removeEventListener("mouseup", endHandler);
+      canvas.removeEventListener("mouseleave", endHandler);
+
+      canvas.removeEventListener("touchstart", startHandler);
+      canvas.removeEventListener("touchmove", moveHandler);
+      canvas.removeEventListener("touchend", endHandler);
+    };
   }, [isScratchedOff]);
 
   // Draw golden metallic canvas surface
@@ -98,61 +165,8 @@ export default function ScratchCardReveal() {
     ctx.fillText("✨ DRAG OR SWIPE TO RUB ✨", w / 2, h / 2 + 18);
   };
 
-  // Scratch Action Handlers
-  const getMousePos = (e: React.MouseEvent | React.TouchEvent) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return { x: 0, y: 0 };
-    const rect = canvas.getBoundingClientRect();
-    
-    // Check if touch event or mouse event
-    if ("touches" in e) {
-      if (e.touches.length === 0) return { x: 0, y: 0 };
-      return {
-        x: e.touches[0].clientX - rect.left,
-        y: e.touches[0].clientY - rect.top,
-      };
-    } else {
-      return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-    }
-  };
-
-  const startScratching = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    isDrawingRef.current = true;
-    scratch(e);
-  };
-
-  const stopScratching = () => {
-    isDrawingRef.current = false;
-    checkScratchPercentage();
-  };
-
-  const scratch = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawingRef.current || isScratchedOff) return;
-    e.preventDefault();
-
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx) return;
-
-    const pos = getMousePos(e);
-    
-    // Draw transparent brush path
-    ctx.globalCompositeOperation = "destination-out";
-    ctx.beginPath();
-    ctx.arc(pos.x, pos.y, 24, 0, Math.PI * 2); // 24px scratch brush diameter
-    ctx.fill();
-  };
-
   // Calculate remaining gold coating area
-  const checkScratchPercentage = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx) return;
-
+  const checkScratchPercentage = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
     try {
       const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const pixels = imgData.data;
@@ -167,8 +181,8 @@ export default function ScratchCardReveal() {
 
       const scratchRatio = transparentCount / (pixels.length / 4);
 
-      // Trigger automatic complete reveal at 45% scratched
-      if (scratchRatio > 0.45) {
+      // Trigger automatic complete reveal at 40% scratched
+      if (scratchRatio > 0.40) {
         setIsScratchedOff(true);
         triggerConfetti();
       }
@@ -255,13 +269,6 @@ export default function ScratchCardReveal() {
               className="absolute inset-0 z-10 w-full h-full cursor-crosshair touch-none"
               exit={{ opacity: 0, scale: 1.05, filter: "blur(5px)" }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              onMouseDown={startScratching}
-              onMouseUp={stopScratching}
-              onMouseLeave={stopScratching}
-              onMouseMove={scratch}
-              onTouchStart={startScratching}
-              onTouchEnd={stopScratching}
-              onTouchMove={scratch}
             />
           )}
         </AnimatePresence>
