@@ -18,12 +18,12 @@ function getGoogleCalendarLink(event: WeddingEvent) {
     startStr = "20261128T133000Z";
     endStr = "20261128T163000Z";
   } else if (event.id === "muhurtha") {
-    // Nov 29, 2026, 10:30 AM IST -> 05:00 UTC
-    startStr = "20261129T050000Z";
-    endStr = "20261129T080000Z";
+    // Nov 29, 2026, 9:00 AM IST -> 03:30 UTC
+    startStr = "20261129T033000Z";
+    endStr = "20261129T063000Z";
   } else {
-    startStr = "20261129T050000Z";
-    endStr = "20261129T080000Z";
+    startStr = "20261129T033000Z";
+    endStr = "20261129T063000Z";
   }
   
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startStr}/${endStr}&details=${details}&location=${location}`;
@@ -41,11 +41,11 @@ function downloadIcsFile(event: WeddingEvent) {
     startStr = "20261128T133000Z";
     endStr = "20261128T163000Z";
   } else if (event.id === "muhurtha") {
-    startStr = "20261129T050000Z";
-    endStr = "20261129T080000Z";
+    startStr = "20261129T033000Z";
+    endStr = "20261129T063000Z";
   } else {
-    startStr = "20261129T050000Z";
-    endStr = "20261129T080000Z";
+    startStr = "20261129T033000Z";
+    endStr = "20261129T063000Z";
   }
 
   const stamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";

@@ -24,7 +24,7 @@ export const weddingConfig = {
   },
 
   // Main Wedding Date for Countdown (Muhurtha: Nov 29, 2026)
-  weddingDate: new Date("2026-11-29T10:30:00+05:30"),
+  weddingDate: new Date("2026-11-29T09:00:00+05:30"),
 
   // Venue link provided by user
   venueMapsLink: "https://share.google/mMvuqc9fTZH9hwnnH",
@@ -36,13 +36,9 @@ export const weddingConfig = {
   // Video Background Loop
   heroVideoSrc: "https://res.cloudinary.com/db03zgsfl/video/upload/q_auto,f_auto/v1781435895/gemini_generated_video_D88547FD_fhgnl9.mp4",
 
-  // Photo Gallery References (Engagement Gallery Photos)
+  // Photo Gallery References (Single Portrait)
   galleryPhotos: [
-    { src: "/wedding/Edited - 38.JPEG", alt: "Kavana and Tilak Engagement portrait" },
-    { src: "/wedding/Edited - 42.JPEG", alt: "Kavana and Tilak laughing candidly" },
     { src: "/wedding/Edited - 98.JPEG", alt: "Kavana and Tilak traditional pose" },
-    { src: "/wedding/Edited - 100.JPEG", alt: "Kavana and Tilak during engagement ceremony" },
-    { src: "/wedding/Edited - 101.JPEG", alt: "Kavana and Tilak sweet moment" },
   ],
 
   // Detailed Itinerary Timeline (Only Reception & Muhurtha)
@@ -60,7 +56,7 @@ export const weddingConfig = {
       id: "muhurtha",
       name: "Muhurtha",
       date: "November 29, 2026",
-      time: "10:30 AM onwards",
+      time: "9:00 AM onwards",
       venue: "S S Samudhaya bhavana",
       mapsLink: "https://share.google/mMvuqc9fTZH9hwnnH",
       description: "Witness the sacred union of Kavana and Tilak as they perform the traditional pheras and take their wedding vows."
