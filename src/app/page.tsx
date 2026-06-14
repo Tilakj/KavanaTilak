@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, Heart } from "lucide-react";
 import { weddingConfig } from "@/utils/weddingConfig";
 import LuxuryRevealDoor from "@/components/wedding/LuxuryRevealDoor";
@@ -14,6 +14,12 @@ import FallingPetals from "@/components/wedding/FallingPetals";
 
 export default function Home() {
   const [isRevealed, setIsRevealed] = useState(false);
+  const { scrollY } = useScroll();
+
+  // Smooth Parallax Scroll transforms
+  const yVideo = useTransform(scrollY, [0, 800], [0, 220]);
+  const yHeroText = useTransform(scrollY, [0, 800], [0, -110]);
+  const opacityHeroText = useTransform(scrollY, [0, 500], [1, 0]);
 
   const handleReveal = () => {
     setIsRevealed(true);
@@ -41,21 +47,27 @@ export default function Home() {
           {/* SECTION 1: HERO HEADER WITH VIDEO BACKGROUND */}
           <section className="relative h-[95vh] md:h-screen w-full flex items-center justify-center overflow-hidden">
             {/* Background Video Layer */}
-            <div className="absolute inset-0 z-0">
+            <motion.div 
+              style={{ y: yVideo }}
+              className="absolute inset-0 z-0"
+            >
               <video
                 src={weddingConfig.heroVideoSrc}
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover scale-100 opacity-70"
+                className="w-full h-full object-cover scale-105 opacity-70"
               />
               {/* Premium dark vignette overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#050814] via-[#050814]/40 to-[#050814]/85 z-10" />
-            </div>
+            </motion.div>
 
             {/* Header Content Overlay */}
-            <div className="relative z-20 text-center px-4 max-w-3xl space-y-6">
+            <motion.div 
+              style={{ y: yHeroText, opacity: opacityHeroText }}
+              className="relative z-20 text-center px-4 max-w-3xl space-y-6"
+            >
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -97,7 +109,7 @@ export default function Home() {
               >
                 Are getting married. You are invited to join their celebrations.
               </motion.p>
-            </div>
+            </motion.div>
 
             {/* Scroll Down Indicator */}
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 opacity-60">

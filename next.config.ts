@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Restrict build tracing to this local directory to prevent scanning parent folders
+  outputFileTracingRoot: path.join(__dirname),
 };
 
 export default nextConfig;

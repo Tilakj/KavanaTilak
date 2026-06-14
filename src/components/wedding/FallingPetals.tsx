@@ -5,14 +5,11 @@ import React, { useEffect, useRef } from "react";
 interface Particle {
   x: number;
   y: number;
-  baseX: number;
-  baseY: number;
   size: number;
   speedY: number;
   speedX: number;
   vx: number; // velocity X
   vy: number; // velocity Y
-  color: string;
   opacity: number;
 }
 
@@ -29,13 +26,7 @@ export default function FallingPetals() {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
-    const maxParticles = 120; // Dense but light stardust count
-
-    const colors = [
-      "rgba(212, 175, 55, ",  // Warm Gold
-      "rgba(251, 245, 183, ", // Pale Cream
-      "rgba(255, 255, 255, ", // Bright White
-    ];
+    const maxParticles = 90; // Balanced stardust count for optimal performance
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -51,26 +42,20 @@ export default function FallingPetals() {
     }
 
     function createParticle(isInitial = false): Particle {
-      const size = Math.random() * 1.5 + 0.8; // Minute sizes (0.8px to 2.3px)
-      const x = Math.random() * (canvas?.width || 800);
-      const y = isInitial ? Math.random() * (canvas?.height || 600) : -10;
-      
+      const size = Math.random() * 1.5 + 0.6; // 0.6px to 2.1px tiny dots
       return {
-        x,
-        y,
-        baseX: x,
-        baseY: y,
+        x: Math.random() * (canvas?.width || 800),
+        y: isInitial ? Math.random() * (canvas?.height || 600) : -10,
         size,
-        speedY: Math.random() * 0.6 + 0.3, // Soft drifting speed
-        speedX: Math.random() * 0.4 - 0.2,
+        speedY: Math.random() * 0.4 + 0.2, // Gentle downward drift
+        speedX: Math.random() * 0.3 - 0.15,
         vx: 0,
         vy: 0,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        opacity: Math.random() * 0.4 + 0.3, // Opacity between 0.3 and 0.7
+        opacity: Math.random() * 0.4 + 0.2, // 0.2 to 0.6 opacity
       };
     }
 
-    // Track Mouse position
+    // Track Mouse positions
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
@@ -83,7 +68,7 @@ export default function FallingPetals() {
       mouseRef.current.active = false;
     };
 
-    // Track Touch position for Mobile
+    // Track Mobile Touch
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         mouseRef.current.x = e.touches[0].clientX;
@@ -107,58 +92,96 @@ export default function FallingPetals() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const mouse = mouseRef.current;
-      const influenceRadius = 130; // Distance of cursor repulsion force
+      const mouseRadius = 140; // Area of cursor influence
+      const particleConnectionDist = 75; // Distance limit to link dots together
 
+      // 1. Update velocities and positions
       particles.forEach((p, idx) => {
-        // Calculate distance to cursor
         if (mouse.active) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < influenceRadius) {
-            // Push force calculation (stronger when closer)
-            const force = (influenceRadius - dist) / influenceRadius;
+          if (dist < mouseRadius) {
+            const force = (mouseRadius - dist) / mouseRadius;
             const angle = Math.atan2(dy, dx);
             
-            // Accelerate velocity away from mouse
-            p.vx += Math.cos(angle) * force * 1.6;
-            p.vy += Math.sin(angle) * force * 1.6;
+            // Repel particles smoothly
+            p.vx += Math.cos(angle) * force * 1.5;
+            p.vy += Math.sin(angle) * force * 1.5;
           }
         }
 
-        // Apply friction to slow down velocities back to base drift
+        // Apply friction to return to drift state
         p.vx *= 0.93;
         p.vy *= 0.93;
 
-        // Apply velocities to coordinates
         p.x += p.speedX + p.vx;
         p.y += p.speedY + p.vy;
 
-        // Draw particle
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}${p.opacity})`;
-        
-        // Add subtle stardust glow
-        if (p.size > 1.8) {
-          ctx.shadowBlur = 4;
-          ctx.shadowColor = "rgba(212, 175, 55, 0.4)";
-        } else {
-          ctx.shadowBlur = 0;
-        }
-        
-        ctx.fill();
-
-        // Reset if offscreen (bottom, left, or right)
+        // Reset if off-screen
         if (p.y > canvas.height + 10 || p.x < -10 || p.x > canvas.width + 10) {
           particles[idx] = createParticle(false);
         }
       });
 
-      // Clear shadows for performance
-      ctx.shadowBlur = 0;
+      // 2. Draw connecting constellation lines
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
 
+        // Draw connections to other particles
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < particleConnectionDist) {
+            const alpha = (1 - dist / particleConnectionDist) * 0.12;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+
+        // Draw laser connections from cursor to particles
+        if (mouse.active) {
+          const dx = p1.x - mouse.x;
+          const dy = p1.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < mouseRadius) {
+            const alpha = (1 - dist / mouseRadius) * 0.22;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // 3. Draw the particles themselves
+      particles.forEach((p) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`;
+        
+        // Add tiny glows to larger particles
+        if (p.size > 1.6) {
+          ctx.shadowBlur = 3;
+          ctx.shadowColor = "rgba(212, 175, 55, 0.35)";
+        } else {
+          ctx.shadowBlur = 0;
+        }
+        ctx.fill();
+      });
+
+      ctx.shadowBlur = 0;
       animationFrameId = requestAnimationFrame(animate);
     };
 
