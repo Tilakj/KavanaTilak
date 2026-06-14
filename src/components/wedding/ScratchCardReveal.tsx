@@ -47,7 +47,7 @@ export default function ScratchCardReveal() {
       <div className="flex flex-col items-center justify-center py-12 px-4 relative">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.03)_0%,rgba(0,0,0,0)_70%)] pointer-events-none" />
         <div 
-          className="w-full max-w-xl aspect-[1.8/1] rounded-2xl relative border-2 border-[#d4af37]/30 bg-[#090f24]/90 overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center justify-center"
+          className="w-full max-w-xl aspect-[1.8/1] rounded-2xl relative border-2 border-gold-500/30 bg-royal-card/90 overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center justify-center"
         >
           <div className="p-6 flex flex-col items-center justify-center text-center">
             <Calendar className="w-8 h-8 text-[#d4af37] mb-2 animate-bounce" />
@@ -83,7 +83,7 @@ export default function ScratchCardReveal() {
 
       {/* Decorative Gold Border Frame Wrapper */}
       <div 
-        className="w-full max-w-xl aspect-[1.8/1] rounded-2xl relative border-2 border-[#d4af37]/30 bg-[#090f24]/90 overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center justify-center"
+        className="w-full max-w-xl aspect-[1.8/1] rounded-2xl relative border-2 border-gold-500/30 bg-royal-card/90 overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center justify-center"
       >
         <div className="p-6 flex flex-col items-center justify-center text-center">
           <Calendar className="w-8 h-8 text-[#d4af37] mb-2 animate-bounce" />

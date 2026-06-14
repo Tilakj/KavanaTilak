@@ -34,7 +34,7 @@ export const weddingConfig = {
   defaultMusicSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Temporary fallback
 
   // Video Background Loop
-  heroVideoSrc: "/wedding/gemini_generated_video_D88547FD.MP4",
+  heroVideoSrc: "https://res.cloudinary.com/db03zgsfl/video/upload/q_auto,f_auto/v1781435895/gemini_generated_video_D88547FD_fhgnl9.mp4",
 
   // Photo Gallery References (Engagement Gallery Photos)
   galleryPhotos: [

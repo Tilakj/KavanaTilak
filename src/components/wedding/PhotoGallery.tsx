@@ -76,7 +76,7 @@ export default function PhotoGallery() {
               />
 
               {/* Hover actions icon overlay */}
-              <div className="absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full bg-[#050814]/80 border border-[#d4af37]/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full bg-background/80 border border-gold-500/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <Maximize2 className="w-4 h-4 text-gold-300" />
               </div>
             </motion.div>
@@ -138,7 +138,7 @@ export default function PhotoGallery() {
             </button>
 
             {/* Description overlay */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[#050814]/80 border border-white/10 px-6 py-2.5 rounded-full text-xs font-sans tracking-widest text-[#fdfcf7] uppercase">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-royal-card/85 border border-gold-500/20 px-6 py-2.5 rounded-full text-xs font-sans tracking-widest text-[#fdfcf7] uppercase">
               {activeIdx + 1} / {weddingConfig.galleryPhotos.length}
             </div>
           </motion.div>

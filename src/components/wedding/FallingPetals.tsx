@@ -95,6 +95,8 @@ export default function FallingPetals() {
       const mouseRadius = 140; // Area of cursor influence
       const particleConnectionDist = 65; // Distance limit to link dots together
 
+      const pColor = "212, 175, 55"; // Elegant gold stardust color
+
       // 1. Update velocities and positions
       particles.forEach((p, idx) => {
         if (mouse.active) {
@@ -141,7 +143,7 @@ export default function FallingPetals() {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
+            ctx.strokeStyle = `rgba(${pColor}, ${alpha})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -158,7 +160,7 @@ export default function FallingPetals() {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
+            ctx.strokeStyle = `rgba(${pColor}, ${alpha})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -169,12 +171,12 @@ export default function FallingPetals() {
       particles.forEach((p) => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`;
+        ctx.fillStyle = `rgba(${pColor}, ${p.opacity})`;
         
         // Add tiny glows to larger particles
         if (p.size > 1.6) {
           ctx.shadowBlur = 3;
-          ctx.shadowColor = "rgba(212, 175, 55, 0.35)";
+          ctx.shadowColor = `rgba(${pColor}, 0.35)`;
         } else {
           ctx.shadowBlur = 0;
         }

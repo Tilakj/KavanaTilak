@@ -60,7 +60,7 @@ export default function RootLayout({
       className={`${cormorant.variable} ${outfit.variable} h-full antialiased`}
       style={{ scrollBehavior: 'auto' }} // Lenis controls scrolling physics
     >
-      <body className="min-h-full flex flex-col bg-[#050814] text-[#fdfcf7]">
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         <LenisProvider>
           {children}
         </LenisProvider>

@@ -7,6 +7,7 @@ import { weddingConfig } from "@/utils/weddingConfig";
 import LuxuryRevealDoor from "@/components/wedding/LuxuryRevealDoor";
 import ScratchCardReveal from "@/components/wedding/ScratchCardReveal";
 import EventTimeline from "@/components/wedding/EventTimeline";
+import VenueMap from "@/components/wedding/VenueMap";
 import PhotoGallery from "@/components/wedding/PhotoGallery";
 import FallingPetals from "@/components/wedding/FallingPetals";
 
@@ -24,7 +25,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#050814] overflow-hidden select-none">
+    <main className="relative min-h-screen bg-background text-foreground overflow-hidden select-none">
       {/* 3D Envelope/Door Cover overlay */}
       <LuxuryRevealDoor onReveal={handleReveal} />
 
@@ -67,7 +68,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="flex justify-center items-center gap-1 bg-[#090f24]/60 border border-[#d4af37]/35 px-4 py-1.5 rounded-full w-fit mx-auto backdrop-blur-sm shadow-[0_4px_15px_rgba(212,175,55,0.1)]"
+                className="flex justify-center items-center gap-1 bg-royal-card/60 border border-[#d4af37]/35 px-4 py-1.5 rounded-full w-fit mx-auto backdrop-blur-sm shadow-[0_4px_15px_rgba(212,175,55,0.1)]"
               >
                 <Sparkles className="w-3.5 h-3.5 text-gold-400" />
                 <span className="text-[9px] font-sans font-bold uppercase tracking-[0.25em] text-[#d4af37]">
@@ -128,11 +129,14 @@ export default function Home() {
           {/* SECTION 5: EVENT SCHEDULE TIMELINE */}
           <EventTimeline />
 
+          {/* SECTION 5.5: VENUE & MAP */}
+          <VenueMap />
+
           {/* SECTION 6: PHOTO GALLERY */}
           <PhotoGallery />
 
           {/* SECTION 8: FOOTER */}
-          <footer className="py-12 bg-[#030610] border-t border-[#d4af37]/10 text-center relative z-20">
+          <footer className="py-12 bg-royal-dark border-t border-[#d4af37]/10 text-center relative z-20">
             <h2 className="font-serif text-3xl text-white font-light mb-3">
               {weddingConfig.couple.first} <span className="text-gold-400">&</span> {weddingConfig.couple.second}
             </h2>
@@ -141,11 +145,7 @@ export default function Home() {
               {weddingConfig.couple.hashtag}
             </p>
             
-            <div className="w-12 h-[1px] bg-[#d4af37]/25 mx-auto mb-6" />
 
-            <p className="text-[10px] font-sans text-slate-500 uppercase tracking-widest">
-              © 2026 {weddingConfig.couple.first} & {weddingConfig.couple.second}. All Rights Reserved.
-            </p>
           </footer>
         </motion.div>
       )}
