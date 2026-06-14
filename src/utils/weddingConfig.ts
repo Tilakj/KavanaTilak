@@ -27,7 +27,7 @@ export const weddingConfig = {
   weddingDate: new Date("2026-11-29T09:00:00+05:30"),
 
   // Venue link provided by user
-  venueMapsLink: "https://share.google/mMvuqc9fTZH9hwnnH",
+  venueMapsLink: "https://maps.app.goo.gl/fSm5Sic7KZALqVuC8",
 
   // Background Music
   musicSrc: "/wedding/music.mp3", 
@@ -49,7 +49,7 @@ export const weddingConfig = {
       date: "November 28, 2026",
       time: "7:00 PM onwards",
       venue: "S S Samudhaya bhavana",
-      mapsLink: "https://share.google/mMvuqc9fTZH9hwnnH",
+      mapsLink: "https://maps.app.goo.gl/fSm5Sic7KZALqVuC8",
       description: "Join us for an evening of celebrations, greetings, dinner, and music as we welcome our guests before the big day."
     },
     {
@@ -58,7 +58,7 @@ export const weddingConfig = {
       date: "November 29, 2026",
       time: "9:00 AM onwards",
       venue: "S S Samudhaya bhavana",
-      mapsLink: "https://share.google/mMvuqc9fTZH9hwnnH",
+      mapsLink: "https://maps.app.goo.gl/fSm5Sic7KZALqVuC8",
       description: "Witness the sacred union of Kavana and Tilak as they perform the traditional pheras and take their wedding vows."
     }
   ] as WeddingEvent[],

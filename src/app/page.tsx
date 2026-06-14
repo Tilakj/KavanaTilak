@@ -41,7 +41,7 @@ export default function Home() {
           className="relative z-10 w-full"
         >
           {/* SECTION 1: HERO HEADER WITH VIDEO BACKGROUND */}
-          <section className="relative h-[95vh] md:h-screen w-full flex items-center justify-center overflow-hidden">
+          <section className="relative h-[95vh] md:h-screen w-full flex items-end justify-center pb-24 md:pb-32 overflow-hidden">
             {/* Background Video Layer */}
             <motion.div 
               style={{ y: yVideo }}
@@ -53,7 +53,7 @@ export default function Home() {
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover scale-105 opacity-70"
+                className="w-full h-full object-cover object-top scale-105 opacity-70"
               />
               {/* Premium dark vignette overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#050814] via-[#050814]/40 to-[#050814]/85 z-10" />
