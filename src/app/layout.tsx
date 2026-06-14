@@ -36,7 +36,7 @@ export const metadata: Metadata = {
         url: "/wedding/Edited - 38.JPEG",
         width: 1200,
         height: 630,
-        alt: "Kavana and Tilak Pre-wedding shoot cover",
+        alt: "Kavana and Tilak Engagement shoot cover",
       },
     ],
   },

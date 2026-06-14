@@ -32,10 +32,10 @@ export default function PhotoGallery() {
       {/* Title */}
       <div className="text-center mb-16 space-y-2">
         <span className="text-[10px] font-sans font-bold tracking-[0.3em] text-gold-400 uppercase">
-          Pre-Wedding Gallery
+          Engagement Gallery
         </span>
         <h2 className="font-serif text-4xl md:text-5xl text-white font-light">
-          Moments of Love
+          Engagement Memories
         </h2>
         <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto mt-4" />
       </div>

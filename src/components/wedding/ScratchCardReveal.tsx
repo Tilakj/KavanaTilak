@@ -55,7 +55,7 @@ export default function ScratchCardReveal() {
               Save The Date
             </h3>
             <h2 className="font-serif text-3xl md:text-4xl text-white font-semibold my-2 tracking-wider">
-              {weddingConfig.events[2].date}
+              {weddingConfig.events[1].date}
             </h2>
             <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent my-3" />
             <div className="grid grid-cols-4 gap-4 md:gap-8 max-w-sm mt-1">
@@ -93,7 +93,7 @@ export default function ScratchCardReveal() {
           </h3>
           
           <h2 className="font-serif text-3xl md:text-4xl text-white font-semibold my-2 tracking-wider">
-            {weddingConfig.events[2].date}
+            {weddingConfig.events[1].date}
           </h2>
 
           <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent my-3" />

@@ -167,33 +167,6 @@ export default function Home() {
           </section>
 
 
-          {/* SECTION 4.5: ENGAGEMENT SPECIAL CARD */}
-          <section className="py-8 px-4 max-w-4xl mx-auto text-center relative z-20">
-            <div className="p-8 rounded-3xl bg-gradient-to-br from-[#090f24] to-[#121b3d] border border-[#d4af37]/35 shadow-[0_15px_40px_rgba(212,175,55,0.08)] backdrop-blur-md relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.08)_0%,rgba(0,0,0,0)_70%)] pointer-events-none" />
-              
-              <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-[#d4af37] uppercase mb-2 block">
-                May 10, 2025
-              </span>
-              
-              <h3 className="font-serif text-3xl text-white font-light mb-4">
-                Our Engagement Gallery
-              </h3>
-              
-              <p className="text-xs md:text-sm text-slate-300 max-w-xl mx-auto mb-6 leading-relaxed">
-                Our engagement took place on May 10th. We have gathered all the beautiful moments and photos from the day into a shared Google Drive folder. You can view and download them below!
-              </p>
-
-              <a
-                href={weddingConfig.engagementDriveLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 py-3 px-6 rounded-xl text-xs md:text-sm font-semibold text-slate-900 bg-gradient-to-r from-[#bf953f] via-[#fcf6ba] to-[#aa771c] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_8px_20px_rgba(212,175,55,0.25)] cursor-pointer"
-              >
-                View & Download Engagement Photos
-              </a>
-            </div>
-          </section>
 
           {/* SECTION 5: EVENT SCHEDULE TIMELINE */}
           <EventTimeline />
