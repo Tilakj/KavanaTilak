@@ -63,12 +63,14 @@ export default function EventTimeline() {
                     </div>
 
                     {/* Dress Code */}
-                    <div className="flex items-center gap-2">
-                      <Shirt className="w-4 h-4 text-gold-500 shrink-0" />
-                      <span>
-                        Dress Code: <strong className="text-white font-medium">{event.dressCode}</strong>
-                      </span>
-                    </div>
+                    {event.dressCode && (
+                      <div className="flex items-center gap-2">
+                        <Shirt className="w-4 h-4 text-gold-500 shrink-0" />
+                        <span>
+                          Dress Code: <strong className="text-white font-medium">{event.dressCode}</strong>
+                        </span>
+                      </div>
+                    )}
 
                     {/* Venue */}
                     <div className="flex items-center gap-2 max-w-xs">

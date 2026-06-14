@@ -26,7 +26,7 @@ export default function FallingPetals() {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
-    const maxParticles = 90; // Balanced stardust count for optimal performance
+    const maxParticles = 180; // Increased stardust count for richer visuals
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -93,7 +93,7 @@ export default function FallingPetals() {
 
       const mouse = mouseRef.current;
       const mouseRadius = 140; // Area of cursor influence
-      const particleConnectionDist = 75; // Distance limit to link dots together
+      const particleConnectionDist = 65; // Distance limit to link dots together
 
       // 1. Update velocities and positions
       particles.forEach((p, idx) => {

@@ -2,14 +2,12 @@
 
 import React, { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Sparkles, Heart } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { weddingConfig } from "@/utils/weddingConfig";
 import LuxuryRevealDoor from "@/components/wedding/LuxuryRevealDoor";
-import AudioPlayer from "@/components/wedding/AudioPlayer";
 import ScratchCardReveal from "@/components/wedding/ScratchCardReveal";
 import EventTimeline from "@/components/wedding/EventTimeline";
 import PhotoGallery from "@/components/wedding/PhotoGallery";
-import RSVPForm from "@/components/wedding/RSVPForm";
 import FallingPetals from "@/components/wedding/FallingPetals";
 
 export default function Home() {
@@ -32,9 +30,6 @@ export default function Home() {
 
       {/* Background Falling Petals Physics Layer (active once opened) */}
       {isRevealed && <FallingPetals />}
-
-      {/* Ambient Sound Player */}
-      <AudioPlayer forcePlayTrigger={isRevealed} />
 
       {/* Main Wedding Content Container */}
       {isRevealed && (
@@ -129,53 +124,12 @@ export default function Home() {
             <ScratchCardReveal />
           </section>
 
-          {/* SECTION 3: INVITATION STATEMENT / PARENTS */}
-          <section className="py-20 px-4 text-center max-w-3xl mx-auto space-y-6 relative">
-            <Heart className="w-8 h-8 text-gold-400 mx-auto animate-pulse" />
-            
-            <p className="font-serif text-lg text-slate-300 leading-relaxed italic">
-              "Two hearts, joined in friendship, united in love."
-            </p>
-            
-            <div className="w-12 h-[1px] bg-[#d4af37]/25 mx-auto" />
-
-            <div className="space-y-4">
-              <p className="text-xs font-sans font-bold text-gold-400 uppercase tracking-widest">
-                Invitation From Parents
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-xl mx-auto pt-2">
-                <div className="p-4 rounded-xl bg-[#090f24]/50 border border-[#d4af37]/10">
-                  <span className="text-[10px] font-sans text-slate-500 uppercase tracking-widest block mb-1">
-                    Groom's Family
-                  </span>
-                  <p className="font-serif text-base text-white">
-                    {weddingConfig.couple.groomParents}
-                  </p>
-                </div>
-                
-                <div className="p-4 rounded-xl bg-[#090f24]/50 border border-[#d4af37]/10">
-                  <span className="text-[10px] font-sans text-slate-500 uppercase tracking-widest block mb-1">
-                    Bride's Family
-                  </span>
-                  <p className="font-serif text-base text-white">
-                    {weddingConfig.couple.brideParents}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-
 
           {/* SECTION 5: EVENT SCHEDULE TIMELINE */}
           <EventTimeline />
 
           {/* SECTION 6: PHOTO GALLERY */}
           <PhotoGallery />
-
-          {/* SECTION 7: RSVP & BLESSINGS */}
-          <RSVPForm />
 
           {/* SECTION 8: FOOTER */}
           <footer className="py-12 bg-[#030610] border-t border-[#d4af37]/10 text-center relative z-20">
