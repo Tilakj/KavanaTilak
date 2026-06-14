@@ -34,12 +34,11 @@ export default function VenueMap() {
             </div>
 
             <h3 className="font-serif text-2xl text-white font-medium mb-3">
-              Shamanur Shivashankarappa Parvathamma Samudhaya Bhavana
+              S S Samudhaya bhavana, Davangere
             </h3>
 
             <p className="text-sm text-slate-400 leading-relaxed">
-              SS Layout, Davanagere, <br />
-              Karnataka 577004, India
+              SS Layout, Davanagere - 577004
             </p>
 
             <div className="mt-6">

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Sparkles } from "lucide-react";
 import { weddingConfig } from "@/utils/weddingConfig";
 import LuxuryRevealDoor from "@/components/wedding/LuxuryRevealDoor";
 import ScratchCardReveal from "@/components/wedding/ScratchCardReveal";
@@ -64,18 +63,7 @@ export default function Home() {
               style={{ y: yHeroText, opacity: opacityHeroText }}
               className="relative z-20 text-center px-4 max-w-3xl space-y-6"
             >
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="flex justify-center items-center gap-1 bg-royal-card/60 border border-[#d4af37]/35 px-4 py-1.5 rounded-full w-fit mx-auto backdrop-blur-sm shadow-[0_4px_15px_rgba(212,175,55,0.1)]"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-gold-400" />
-                <span className="text-[9px] font-sans font-bold uppercase tracking-[0.25em] text-[#d4af37]">
-                  {weddingConfig.couple.hashtag}
-                </span>
-                <Sparkles className="w-3.5 h-3.5 text-gold-400" />
-              </motion.div>
+
 
               <motion.h1
                 className="font-serif text-6xl md:text-8xl text-white font-light tracking-wide leading-none"
