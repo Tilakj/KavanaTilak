@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Outfit } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import LenisProvider from "@/components/wedding/LenisProvider";
 import "./globals.css";
 
@@ -63,6 +64,7 @@ export default function RootLayout({
         <LenisProvider>
           {children}
         </LenisProvider>
+        <Analytics />
       </body>
     </html>
   );
